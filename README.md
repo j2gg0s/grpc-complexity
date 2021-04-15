@@ -4,7 +4,10 @@ gRPC's rate limiter with reuqest complexity.
 
 ## Usage
 
-### protoc
+### Install protoc plugin
+`go get github.com/j2gg0s/grpc-complexity/cmd/protoc-gen-go-complexity`
+
+### Generate Code
 ```
 protoc \
     --proto_path=. \
