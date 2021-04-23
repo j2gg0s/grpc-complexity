@@ -3,6 +3,7 @@ package complexity
 import (
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"golang.org/x/time/rate"
 	"google.golang.org/grpc/grpclog"
 )
@@ -44,4 +45,24 @@ func AddLimiter(token string, limiter *rate.Limiter) Option {
 // Every request's complexity should less b
 func AddEvery(token string, d time.Duration, b int) Option {
 	return func(s *Server) { s.limiters[token] = rate.NewLimiter(rate.Every(d), b) }
+}
+
+func EnableMetric(registerer prometheus.Registerer) Option {
+	return func(s *Server) {
+		s.enableMetric = true
+		s.registerer = registerer
+	}
+}
+
+func DisableMetric() Option {
+	return func(s *Server) {
+		s.enableMetric = false
+		s.registerer = nil
+	}
+}
+
+func WithCounterVec(counter *prometheus.CounterVec) Option {
+	return func(s *Server) {
+		s.counter = counter
+	}
 }

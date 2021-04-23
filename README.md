@@ -19,10 +19,14 @@ protoc \
 
 ### Add interceptor
 ```
-cserver := complexity.New(
+cserver, err := complexity.New(
     complexity.WithGlobalEvery(time.Second, 3),
     complexity.WithMaxWait(5*time.Second),
 )
+if err != nil {
+    log.Fatalf("new complexity server: %v", err)
+}
+
 pb.RegisterGreeterComplexityServer(
     cserver,
     &pb.DefaultGreeterComplexityServer{},
